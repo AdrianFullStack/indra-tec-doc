@@ -17,6 +17,7 @@ import appConfig from './config/app.config';
       ]
     }),
     PrismaModule,
+    AuthModule,
     FolderModule,
     FileModule
   ],
