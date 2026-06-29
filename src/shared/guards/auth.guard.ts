@@ -10,8 +10,8 @@ export class AuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest<Request>();
 
         // Recuperar la cookie gracias a cookie-parser
-        const token = request.cookies['access_token'];
-        //const token = request.signedCookies['access_token'];
+        // const token = request.cookies['access_token'];
+        const token = request.signedCookies['access_token'];
 
         if (!token) {
             throw new UnauthorizedException('No hay sesión activa');

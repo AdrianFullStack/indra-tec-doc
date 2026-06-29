@@ -2,37 +2,38 @@ import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
 import * as bcrypt from 'bcrypt';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private jwtService: JwtService,
+        private usersService: UserService,
         // private mailerService: MailerService,
-        // private usersService: UsersService // Inyecta tu servicio de usuarios
     ) { }
 
     async login(email: string, pass: string) {
-        // 1. Buscar usuario (Mockup)
-        // const user = await this.usersService.findByEmail(email);
-        const user = {
-            id: 1,
-            email: 'rasuclupe@example.com',
-            password: '$2b$10$...hash'
-        };
+        const user = await this.usersService.findByEmail(email);
 
         if (!user) throw new UnauthorizedException('Credenciales inválidas');
 
         // 2. Verificar contraseña
-        // const isMatch = await bcrypt.compare(pass, user.password);
-        const isMatch = true; // Simulación
+        const isMatch = await bcrypt.compare(pass, user.password);
 
         if (!isMatch) throw new UnauthorizedException('Credenciales inválidas');
 
         // 3. Generar JWT
-        const payload = { sub: user.id, email: user.email };
+        const payload = {
+            sub: user.id,
+            username: `${user.name} ${user.lastname}`,
+            email: user.email
+        };
         const accessToken = await this.jwtService.signAsync(payload);
 
-        return { accessToken };
+        return {
+            payload,
+            accessToken
+        };
     }
 /*
     async forgotPassword(email: string) {

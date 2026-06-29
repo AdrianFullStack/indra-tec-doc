@@ -12,29 +12,33 @@ export class AuthController {
         @Body() loginDto: Record<string, any>,
         @Res({ passthrough: true }) res: Response
     ) {
-        const { accessToken } = await this.authService.login(loginDto.email, loginDto.password);
+        const { accessToken, payload } = await this.authService.login(loginDto.email, loginDto.password);
 
         // Configurar la cookie segura
         res.cookie('access_token', accessToken, {
             httpOnly: true, // Invisible para JavaScript del frontend
-            // signed: true,
+            signed: true,
             secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
             sameSite: 'strict', // Previene ataques CSRF
             maxAge: 1000 * 60 * 60, // 1 hora
         });
 
-        return { message: 'Login exitoso' };
+        return { 
+            ...payload
+         };
     }
-    /*
+/*
     @Post('forgot-password')
     async forgotPassword(@Body('email') email: string) {
         return this.authService.forgotPassword(email);
     }
-
+*/
+    @HttpCode(HttpStatus.OK)
     @Post('logout')
-    async logout(@Res({ passthrough: true }) res: Response) {
+    async logout(
+        @Res({ passthrough: true }) res: Response
+    ) {
         res.clearCookie('access_token');
         return { message: 'Sesión cerrada' };
     }
-    */
 }

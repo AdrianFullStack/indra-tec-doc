@@ -8,7 +8,9 @@ import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(cookieParser());
+  app.use(cookieParser(
+    'TU_SECRETO_SUPER_SEGURO'
+  ));
 
   app.enableCors({
     origin: 'http://localhost:3000',
