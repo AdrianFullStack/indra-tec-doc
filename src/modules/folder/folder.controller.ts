@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { FolderService } from './folder.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('folders')
 export class FolderController {
@@ -15,6 +16,7 @@ export class FolderController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   findAll() {
     return this.folderService.findAll();
   }
