@@ -17,7 +17,7 @@ export class AuthController {
         // Configurar la cookie segura
         res.cookie('access_token', accessToken, {
             httpOnly: true, // Invisible para JavaScript del frontend
-            signed: true,
+            //signed: true,
             secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
             sameSite: 'strict', // Previene ataques CSRF
             maxAge: 1000 * 60 * 60, // 1 hora

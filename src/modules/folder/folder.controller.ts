@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { FolderService } from './folder.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 @Controller('folders')
 export class FolderController {
