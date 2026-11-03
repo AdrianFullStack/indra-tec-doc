@@ -5,7 +5,9 @@ import { UpdateFolderDto } from './dto/update-folder.dto';
 
 @Controller('folders')
 export class FolderController {
-  constructor(private readonly folderService: FolderService) {}
+  constructor(
+    private readonly folderService: FolderService
+  ) {}
 
   @Post()
   create(
