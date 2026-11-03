@@ -6,6 +6,7 @@ import { FolderModule } from './modules/folder/folder.module';
 import { FileModule } from './modules/file/file.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './modules/user/user.module';
 import appConfig from './config/app.config';
 // import { createObserveModule } from '@nestjs/observe';
 
@@ -20,6 +21,7 @@ import appConfig from './config/app.config';
       ]
     }),
     PrismaModule,
+    AuthModule,
     FolderModule,
     FileModule,
     // ObserveModule.forRoot({
