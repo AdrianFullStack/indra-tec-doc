@@ -8,6 +8,7 @@ import { PrismaModule } from './common/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import appConfig from './config/app.config';
+import awsConfig from './config/aws.config';
 // import { createObserveModule } from '@nestjs/observe';
 
 // export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -17,13 +18,15 @@ import appConfig from './config/app.config';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [
-        appConfig
+        appConfig,
+        awsConfig
       ]
     }),
     PrismaModule,
     AuthModule,
     FolderModule,
     FileModule,
+    UserModule
     // ObserveModule.forRoot({
     //   appKey: process.env.OBSERVE_APP_KEY ?? 'YOUR_APP_KEY',
     //   appSecret: process.env.OBSERVE_APP_SECRET ?? 'YOUR_APP_SECRET',

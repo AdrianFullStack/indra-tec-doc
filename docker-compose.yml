@@ -7,6 +7,9 @@ services:
     container_name: api-techdoc
     ports:
       - '${APP_PORT}:${APP_PORT}'
+    environment:
+      DB_HOST: db-techdoc
+      DATABASE_URL: postgres://postgres:postgres@db-techdoc:5432/techdoc_db
     volumes:
       - .:/app
       - /app/node_modules
@@ -29,3 +32,4 @@ services:
 
 volumes:
   postgres_data:
+  node_modules:
