@@ -1,11 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client-js"
-  // output   = "../generated/prisma"
+  provider     = "prisma-client-js"
   moduleFormat = "cjs"
 }
 
@@ -22,29 +16,24 @@ model User {
   active    Boolean   @default(true)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
-
-  folders Folder[]
-  files   File[]
+  files     File[]
+  folders   Folder[]
 
   @@map("users")
 }
 
 model Folder {
-  id       String @id @default(uuid()) @db.Uuid
-  name     String @db.VarChar(50)
-  position Int    @db.SmallInt
-
-  ownerId String @map("owner_id") @db.Uuid
-  owner   User   @relation(fields: [ownerId], references: [id])
-
-  folderId String?  @map("folder_id") @db.Uuid
-  parent   Folder?  @relation("FolderHierarchy", fields: [folderId], references: [id])
-  children Folder[] @relation("FolderHierarchy")
-
-  files File[]
-
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String    @db.VarChar(50)
+  position  Int       @db.SmallInt
+  ownerId   String    @map("owner_id") @db.Uuid
+  folderId  String?   @map("folder_id") @db.Uuid
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
+  files     File[]
+  parent    Folder?   @relation("FolderHierarchy", fields: [folderId], references: [id])
+  children  Folder[]  @relation("FolderHierarchy")
+  owner     User      @relation(fields: [ownerId], references: [id])
 
   @@index([ownerId])
   @@index([folderId])
@@ -52,24 +41,20 @@ model Folder {
 }
 
 model File {
-  id           String @id @default(uuid()) @db.Uuid
-  name         String @db.VarChar(100)
-  originalName String @db.VarChar(100)
-  mimeType     String @db.VarChar(20)
-  extension    String @db.VarChar(20)
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String    @db.VarChar(100)
+  originalName String    @db.VarChar(100)
+  mimeType     String    @db.VarChar(20)
+  extension    String    @db.VarChar(20)
   size         Float
-
-  key    String @db.VarChar(200)
-  bucket String @db.VarChar(200)
-
-  folderId String @map("folder_id") @db.Uuid
-  folder   Folder @relation(fields: [folderId], references: [id])
-
-  ownerId String @map("owner_id") @db.Uuid
-  owner   User   @relation(fields: [ownerId], references: [id])
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
+  key          String    @db.VarChar(200)
+  bucket       String    @db.VarChar(200)
+  folderId     String    @map("folder_id") @db.Uuid
+  ownerId      String    @map("owner_id") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
+  folder       Folder    @relation(fields: [folderId], references: [id])
+  owner        User      @relation(fields: [ownerId], references: [id])
 
   @@index([ownerId])
   @@index([folderId])

@@ -16,21 +16,24 @@ export class FolderService {
     name: true
   }
 
-  create(createFolderDto: CreateFolderDto) {
+  create(createFolderDto: CreateFolderDto, userId: string) {
     const { name, parentId } = createFolderDto;
     return this.prisma.folder.create({
       data: {
         name: name,
         position: 1,
-        ownerId: 'b1c62e7f-3036-4a9a-8a57-75f366fa39ca',
+        ownerId: userId,
         folderId: parentId ?? null
       },
       select: this.selectFolder
     });
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     const folders = await this.prisma.folder.findMany({
+        where: {
+          ownerId: userId
+        },
         orderBy: { createdAt: 'desc' },
         select: {
           ...this.selectFolder,
@@ -41,16 +44,26 @@ export class FolderService {
     return buildTree(folders);
   }
 
-  findOne(id: string) {
+  findOne(id: string, userId: string) {
     return this.prisma.folder.findUnique({
-      where: { id },
+      where: {
+        id,
+        ownerId: userId
+      },
       select: this.selectFolder
     });
   }
 
-  update(id: string, updateFolderDto: UpdateFolderDto) {
+  update(
+    id: string,
+    updateFolderDto: UpdateFolderDto,
+    userId: string
+  ) {
     return this.prisma.folder.update({
-      where: { id },
+      where: {
+        id,
+        ownerId: userId
+      },
       data: {
         ...updateFolderDto,
         updatedAt: new Date()
@@ -59,9 +72,12 @@ export class FolderService {
     });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, userId: string): Promise<void> {
     await this.prisma.folder.delete({
-      where: { id }
+      where: {
+        id,
+        ownerId: userId
+      }
     });
   }
 }
